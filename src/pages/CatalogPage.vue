@@ -1,10 +1,20 @@
 <template>
   <!-- Simple vue using ArticleCard for display all articles -->
-  <q-page class="flex flex-center">
-    <div v-for="article in articles" :key="article.id" flat bordered>
-        <ArticleCard :article="article" />
+
+  <div class="container mt-4 q-px-xl">
+
+    <div class="subtitle_homepage">
+      <h2>Liste des articles</h2>
     </div>
-  </q-page>
+
+    <q-page class="flex">
+      <div v-for="article in articles" :key="article.id"
+        class="q-pa-md row q-gutter-md items-start">
+          <ArticleCard :article="article" />
+      </div>
+    </q-page>
+
+  </div>
 </template>
 
 <script>
