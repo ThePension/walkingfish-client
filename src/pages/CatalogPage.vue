@@ -1,11 +1,9 @@
 <template>
   <!-- Simple vue using ArticleCard for display all articles -->
   <q-page class="flex flex-center">
-    <q-card v-for="article in articles" :key="article.id" flat bordered>
-      <q-card-section>
+    <div v-for="article in articles" :key="article.id" flat bordered>
         <ArticleCard :article="article" />
-      </q-card-section>
-    </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -41,7 +39,7 @@ export default defineComponent({
         });
     },
   },
-  mounted() {
+  created() {
     this.getArticles();
   },
 });
