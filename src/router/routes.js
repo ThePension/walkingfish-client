@@ -9,10 +9,29 @@ const routes = [
         alias: ["/index", "/home"],
         component: () => import("pages/HomePage.vue"),
       },
-      { path: "about", component: () => import("pages/AboutPage.vue") },
+      {
+        path: "about",
+        component: () => import("pages/AboutPage.vue"),
+      },
       {
         path: "catalog",
         component: () => import("pages/CatalogPage.vue"),
+      },
+      {
+        path: "admin",
+        component: () => import("pages/AdminPage.vue"),
+      },
+      {
+        path: "color-management",
+        component: () => import("pages/ColorManagement.vue"),
+      },
+      {
+        path: "add-article",
+        component: () => import("pages/AddArticle.vue"),
+      },
+      {
+        path: "article-management",
+        component: () => import("pages/ArticleManagement.vue"),
       },
     ],
   },
