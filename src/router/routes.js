@@ -33,6 +33,10 @@ const routes = [
         path: "article-management",
         component: () => import("pages/ArticleManagement.vue"),
       },
+      {
+        path: "login",
+        component: () => import("pages/LoginPage.vue"),
+      },
     ],
   },
 
