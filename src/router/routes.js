@@ -22,15 +22,15 @@ const routes = [
         component: () => import("pages/AdminPage.vue"),
       },
       {
-        path: "color-management",
+        path: "admin/color-management",
         component: () => import("pages/ColorManagement.vue"),
       },
       {
-        path: "add-article",
+        path: "admin/add-article",
         component: () => import("pages/AddArticle.vue"),
       },
       {
-        path: "article-management",
+        path: "admin/article-management",
         component: () => import("pages/ArticleManagement.vue"),
       },
       {

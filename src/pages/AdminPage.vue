@@ -5,21 +5,21 @@
         outline
         style="color: green"
         label="Gestion des coloris"
-        to="/colorManagement"
+        to="admin/color-management"
       />
 
       <q-btn
         outline
         style="color: black"
         label="Ajouter un article"
-        to="/addArticle"
+        to="/admin/add-article"
       />
 
       <q-btn
         outline
         style="color: blue"
         label="Gestion des articles"
-        to="/articleManagement"
+        to="/admin/article-management"
       />
 
       <!-- TODO Modify the action for a real disconnection -->

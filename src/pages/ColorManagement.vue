@@ -24,7 +24,7 @@
               label="Valeur hexadécimale"
               lazy-rules
               :rules="[
-                val => val.length == 6 || 'La couleur doit être au format hexadécimale sans le `#`'
+                val => val.length == 7 || 'La couleur doit être au format hexadécimale avec le `#`'
               ]"
             />
 
@@ -81,8 +81,21 @@ export default defineComponent({
     },
     addColori() {
       // Get coloris from WK_API_URL
+      
+      // Include the JWT in the Authorization header for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
+
+      let Colori = new FormData();
+        Colori.append("name", this.colori.name);
+        Colori.append("hexa", this.colori.hexa);
+
       axios
-        .post(process.env.WK_API_URL + "/colori")
+        .post(process.env.WK_API_URL + "/colori", Colori,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
         .then((response) => {
           console.log(response.data);     // Debug
         })

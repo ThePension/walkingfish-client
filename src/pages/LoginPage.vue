@@ -1,7 +1,10 @@
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "src/stores/auth";
+
+const router = useRouter()
 
 const username = ref("");
 const password = ref("");
@@ -9,7 +12,7 @@ const errors = ref([]);
 
 const authStore = useAuthStore();
 
-const login = async () => {
+async function login() {
   try {
     const User = new FormData();
     User.append("username", username.value);
@@ -20,7 +23,7 @@ const login = async () => {
       User
     );
 
-    console.log(response.data);
+    console.log(response);  // Debug
 
     if (response.data.error) {
       errors.value = [response.data.error];
@@ -29,12 +32,17 @@ const login = async () => {
 
     authStore.login();
 
-    this.$q.notify({
-      message: "Login successful",
-      color: "positive",
-    });
+    // TODO Find alternative to display Quasar notification.
+    //      Cannot use `this`in script `setup` !
 
-    this.$router.push({ name: "home" });
+    // app.appContext.config.globalProperties.$q.notify({
+    //   message: "Login successful",
+    //   color: "positive",
+    // });
+
+    localStorage.setItem('jwt', response.data);
+
+    router.push({ name: "home" });
   } catch (error) {
     console.log(error);
   }
