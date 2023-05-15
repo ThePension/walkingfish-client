@@ -44,12 +44,27 @@
       <div class="text-h6 col">Prix</div>
       <div class="col text-h6 text-right q-mx-lg">{{ article.price }} CHF</div>
     </q-card-section>
+
+    <!-- Change variable and check if user is logged in -->
+    <q-card-section v-if="true">
+      <h1> {{ article.id }} </h1>
+      <router-link
+        :to="{
+          path: 'admin/edit-article/:id',
+          params: { id: article.id }
+        }">
+        <q-btn 
+        color="primary"
+        label="Editer" />
+      </router-link>
+    </q-card-section>
   </q-card>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
+import { useAuthStore } from "src/stores/auth";
 
 // Props
 export default defineComponent({
@@ -67,6 +82,7 @@ export default defineComponent({
     };
   },
   methods: {
+
     generate() {
       axios
         .get(process.env.PEXELS_API_URL, {

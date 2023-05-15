@@ -4,6 +4,8 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "src/stores/auth";
 
+// Alternaive to this.$router...
+// https://router.vuejs.org/guide/advanced/composition-api.html
 const router = useRouter()
 
 const username = ref("");

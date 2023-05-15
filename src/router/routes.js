@@ -34,6 +34,10 @@ const routes = [
         component: () => import("pages/ArticleManagement.vue"),
       },
       {
+        path: "admin/edit-article/:id",
+        component: () => import("pages/EditArticle.vue"),
+      },
+      {
         path: "login",
         component: () => import("pages/LoginPage.vue"),
       },

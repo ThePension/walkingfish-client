@@ -1,12 +1,12 @@
 <template>
     <q-page class="flex flex-center">
       <div class="q-pa-md q-gutter-sm">
-        <div class="text-h6 col">Ajouter un article</div>
+        <div class="text-h6 col">Editer un article</div>
         <div class="col">
 
           <!-- ARTICLE FORM -->
           <q-form
-            @submit="addArticle"
+            @submit="editArticle()"
             class="q-gutter-md"
             style="min-width: 500px">
 
@@ -113,7 +113,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 
 export default defineComponent({
-  name: "AddArticle",
+  name: "EditArticle",
 
   data() {
     return {
@@ -153,7 +153,20 @@ export default defineComponent({
         });
     },
 
-    addArticle() {
+    getArticle() {
+        // Get the article to edit
+        axios
+            .get(process.env.WK_API_URL + "/article/" + this.$route.params.id)
+            .then((response) => {
+                console.log(response.data);     // Debug
+                this.article = response.data;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
+
+    editArticle() {
       // Add new article to WK_API_URL
 
       // Include the JWT in the Authorization header for future requests
@@ -173,7 +186,7 @@ export default defineComponent({
       console.log(Article);
 
       axios
-        .post(process.env.WK_API_URL + "/article", Article,
+        .put(process.env.WK_API_URL + "/article", Article,
         {
           headers: {
             "Content-Type": "application/json",
@@ -189,6 +202,7 @@ export default defineComponent({
   },
   created() {
     this.getColoris();
+    this.getArticle();
   },
 });
 </script>
