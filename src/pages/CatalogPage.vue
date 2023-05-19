@@ -7,7 +7,11 @@
     </div>
 
     <q-page class="row q-col-gutter-md">
-      <div v-for="article in articles" :key="article.id" class="col-4">
+      <div
+        v-for="article in articles"
+        :key="article.id"
+        class="col-12 col-sm-6 col-md-4"
+      >
         <ArticleCard :article="article" />
       </div>
     </q-page>
