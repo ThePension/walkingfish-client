@@ -23,7 +23,11 @@
       />
 
       <!-- TODO Modify the action for a real disconnection -->
-      <q-btn outline style="color: red" label="Se déconnecter" to="/" />
+      <q-btn 
+        outline 
+        style="color: red" 
+        label="Se déconnecter" 
+        @click="disconnect"/>
     </div>
   </q-page>
 </template>
@@ -37,6 +41,13 @@ export default defineComponent({
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+
+    disconnect() {
+      localStorage.removeItem('jwt');
+
+      this.$router.push({ name: "home" });
+    }
+  },
 });
 </script>

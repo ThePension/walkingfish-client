@@ -202,6 +202,8 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
         });
+
+        this.$router.push({ path: "/admin" });
     },
   },
   created() {

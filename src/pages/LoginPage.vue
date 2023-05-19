@@ -37,14 +37,14 @@ async function login() {
 
     authStore.login();
 
-    localStorage.setItem("jwt", response.data);
-
     // $q.notify({
     //   message: "Login successful",
     //   color: "positive",
     // });
 
-    router.push({ name: "home" });
+    localStorage.setItem("jwt", response.data);
+
+    router.push({ path: "admin" });
   } catch (error) {
     console.log(error);
   }
