@@ -1,3 +1,53 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import axios from "axios";
+
+const coloris = ref([]);
+const colori = ref({
+  name: "",
+  hexa: "",
+});
+
+const fetchColoris = () => {
+  axios
+    .get(process.env.WK_API_URL + "/colori")
+    .then((response) => {
+      coloris.value = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const addColori = () => {
+  // Include the JWT in the Authorization header for future requests
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${localStorage.getItem("jwt")}`;
+
+  let Colori = new FormData();
+  Colori.append("name", colori.value.name);
+  Colori.append("hexa", colori.value.hexa);
+
+  axios
+    .post(process.env.WK_API_URL + "/colori", Colori, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      fetchColoris();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+onMounted(() => {
+  fetchColoris();
+});
+</script>
+
 <template>
   <q-page class="flex flex-center">
     <div class="q-pa-md q-gutter-sm">
@@ -49,65 +99,3 @@
     </div>
   </q-page>
 </template>
-
-<script>
-import { defineComponent } from "vue";
-import axios from "axios";
-
-export default defineComponent({
-  name: "ColorManagement",
-
-  data() {
-    return {
-      colori: {
-        name: null,
-        hexa: null,
-      },
-      coloris: [],
-    };
-  },
-  methods: {
-    getColoris() {
-      // Get coloris from WK_API_URL
-      axios
-        .get(process.env.WK_API_URL + "/colori")
-        .then((response) => {
-          this.coloris = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    addColori() {
-      // Get coloris from WK_API_URL
-
-      // Include the JWT in the Authorization header for future requests
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${localStorage.getItem("jwt")}`;
-
-      let Colori = new FormData();
-      Colori.append("name", this.colori.name);
-      Colori.append("hexa", this.colori.hexa);
-
-      axios
-        .post(process.env.WK_API_URL + "/colori", Colori, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          this.getColoris();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-        this.$router.push({ path: "/admin" });
-    },
-  },
-  created() {
-    this.getColoris();
-  },
-});
-</script>
