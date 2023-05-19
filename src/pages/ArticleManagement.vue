@@ -173,7 +173,7 @@ methods: {
     console.log(Article);
 
     axios
-      .post(process.env.WK_API_URL + "/article", Article,
+      .put(process.env.WK_API_URL + "/article", Article,
       {
         headers: {
           "Content-Type": "application/json",

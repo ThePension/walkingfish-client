@@ -50,7 +50,7 @@
       <h1> {{ article.id }} </h1>
       <router-link
         :to="{
-          path: 'admin/edit-article/:id',
+          path: 'admin/edit-article/' + article.id,
           params: { id: article.id }
         }">
         <q-btn 

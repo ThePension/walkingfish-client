@@ -155,6 +155,10 @@ export default defineComponent({
 
     getArticle() {
         // Get the article to edit
+
+        // Include the JWT in the Authorization header for future requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
+
         axios
             .get(process.env.WK_API_URL + "/article/" + this.$route.params.id)
             .then((response) => {
