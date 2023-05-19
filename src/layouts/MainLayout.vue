@@ -1,3 +1,14 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { useAuthStore } from "src/stores/auth";
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+  console.log(authStore.isLoggedIn);
+});
+</script>
+
 <template>
   <q-layout view="hHh LpR fff">
     <q-header>
@@ -26,6 +37,15 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
+
+        <!-- Admin button is the user is logged in -->
+        <q-btn
+          v-if="authStore.isLoggedIn"
+          label="Dashboard"
+          color="purple"
+          to="/admin"
+          class="q-mr-md"
+        />
       </q-toolbar>
     </q-header>
 
@@ -42,18 +62,6 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script>
-import { defineComponent, ref } from "vue";
-
-export default defineComponent({
-  name: "MainLayout",
-
-  components: {},
-
-  setup() {},
-});
-</script>
 
 <style lang="scss">
 .logo-img {

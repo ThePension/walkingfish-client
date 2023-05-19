@@ -39,10 +39,10 @@ async function login() {
 
     localStorage.setItem("jwt", response.data);
 
-    $q.notify({
-      message: "Login successful",
-      color: "positive",
-    });
+    // $q.notify({
+    //   message: "Login successful",
+    //   color: "positive",
+    // });
 
     router.push({ name: "home" });
   } catch (error) {
