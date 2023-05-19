@@ -1,17 +1,13 @@
 <template>
   <!-- Simple vue using ArticleCard for display all articles -->
 
-  <div class="container mt-4 q-px-xl">
+  <div class="q-px-xl">
     <div class="subtitle_homepage">
       <h2>Liste des articles</h2>
     </div>
 
-    <q-page class="flex">
-      <div
-        v-for="article in articles"
-        :key="article.id"
-        class="q-pa-md row q-gutter-md items-start"
-      >
+    <q-page class="row q-col-gutter-md">
+      <div v-for="article in articles" :key="article.id" class="col-4">
         <ArticleCard :article="article" />
       </div>
     </q-page>

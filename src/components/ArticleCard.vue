@@ -40,8 +40,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <q-card class="my-card" style="width: 300px">
-    <q-img :src="image" style="width: 300px; height: 300px" />
+  <q-card>
+    <q-img :src="image" style="width: 100%; height: auto" />
 
     <q-card-section>
       <div class="text-h5">{{ props.article.name }}</div>
