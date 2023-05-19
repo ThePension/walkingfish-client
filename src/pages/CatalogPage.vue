@@ -12,7 +12,7 @@
         :key="article.id"
         class="col-12 col-sm-6 col-md-4"
       >
-        <ArticleCard :article="article" />
+        <ArticleCard :article="article" @refresh="getArticles" />
       </div>
     </q-page>
   </div>

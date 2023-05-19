@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted, defineProps, defineEmits } from "vue";
 import { useQuasar } from "quasar";
 import axios from "axios";
+
+const emits = defineEmits(["refresh"]);
 
 const props = defineProps({
   article: {
@@ -26,6 +28,35 @@ const generate = () => {
     .then((response) => {
       // Set the image data
       image.value = response.data.photos[0].src.original;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const deleteArticle = (id) => {
+  // Ask confirmation
+  if (!confirm("Voulez-vous vraiment supprimer cet article ?")) {
+    return;
+  }
+
+  // Include the JWT in the Authorization header for future requests
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${localStorage.getItem("jwt")}`;
+
+  axios
+    .delete(process.env.WK_API_URL + "/article/" + id)
+    .then((response) => {
+      // Show a success message
+      // const $q = useQuasar();
+      // $q.notify({
+      //   color: "positive",
+      //   message: "Article supprimé avec succès",
+      // });
+
+      // Emit the refresh event
+      emits("refresh");
     })
     .catch((error) => {
       console.log(error);
@@ -98,6 +129,14 @@ onMounted(() => {
       >
         <q-btn color="primary" label="Editer" />
       </router-link>
+
+      <!-- Delete button -->
+      <q-btn
+        color="negative"
+        label="Supprimer"
+        class="q-ml-sm"
+        @click="deleteArticle(props.article.id)"
+      />
     </q-card-section>
   </q-card>
 </template>
