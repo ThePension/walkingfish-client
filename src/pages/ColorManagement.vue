@@ -1,53 +1,53 @@
 <template>
-    <q-page class="flex flex-center">
-      <div class="q-pa-md q-gutter-sm">
-        <div class="text-h6 col">Ajouter une couleur</div>
-        <div class="col">
+  <q-page class="flex flex-center">
+    <div class="q-pa-md q-gutter-sm">
+      <div class="text-h6 col">Ajouter une couleur</div>
+      <div class="col">
+        <!-- COLOR FORM -->
+        <q-form @submit="addColori" class="q-gutter-md">
+          <q-input
+            filled
+            v-model="colori.name"
+            label="Nom"
+            hint="Nom de la couleur"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val && val.length > 0) || 'La couleur doit avoir un nom !',
+            ]"
+          />
 
-          <!-- COLOR FORM -->
-          <q-form
-            @submit="addColori"
-            class="q-gutter-md">
+          <q-input
+            filled
+            v-model="colori.hexa"
+            label="Valeur hexadécimale"
+            lazy-rules
+            :rules="[
+              (val) =>
+                val.length == 7 ||
+                'La couleur doit être au format hexadécimale avec le `#`',
+            ]"
+          />
 
-            <q-input
-              filled
-              v-model="colori.name"
-              label="Nom"
-              hint="Nom de la couleur"
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'La couleur doit avoir un nom !']"
-            />
-
-            <q-input
-              filled
-              v-model="colori.hexa"
-              label="Valeur hexadécimale"
-              lazy-rules
-              :rules="[
-                val => val.length == 7 || 'La couleur doit être au format hexadécimale avec le `#`'
-              ]"
-            />
-
-            <div>
-              <q-btn label="Submit" type="submit" color="primary"/>
-            </div>
-          </q-form>
-          <!-- END COLOR FORM -->
-
-        </div>
-        <div class="text-h6 col">Couleurs disponibles</div>
-        <div class="col">
-            <q-chip
-            v-for="colori in coloris"
-            :key="colori.id"
-            :style="{ 'background-color': colori.hexa }"
-            text-color="black">
-            {{ colori.name }}
-            </q-chip>
-        </div>
+          <div>
+            <q-btn label="Submit" type="submit" color="primary" />
+          </div>
+        </q-form>
+        <!-- END COLOR FORM -->
       </div>
-
-    </q-page>
+      <div class="text-h6 col">Couleurs disponibles</div>
+      <div class="col">
+        <q-chip
+          v-for="colori in coloris"
+          :key="colori.id"
+          :style="{ 'background-color': colori.hexa }"
+          text-color="black"
+        >
+          {{ colori.name }}
+        </q-chip>
+      </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -72,7 +72,6 @@ export default defineComponent({
       axios
         .get(process.env.WK_API_URL + "/colori")
         .then((response) => {
-          console.log(response.data);     // Debug
           this.coloris = response.data;
         })
         .catch((error) => {
@@ -81,23 +80,24 @@ export default defineComponent({
     },
     addColori() {
       // Get coloris from WK_API_URL
-      
+
       // Include the JWT in the Authorization header for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${localStorage.getItem("jwt")}`;
 
       let Colori = new FormData();
-        Colori.append("name", this.colori.name);
-        Colori.append("hexa", this.colori.hexa);
+      Colori.append("name", this.colori.name);
+      Colori.append("hexa", this.colori.hexa);
 
       axios
-        .post(process.env.WK_API_URL + "/colori", Colori,
-        {
+        .post(process.env.WK_API_URL + "/colori", Colori, {
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((response) => {
-          console.log(response.data);     // Debug
+          this.getColoris();
         })
         .catch((error) => {
           console.log(error);

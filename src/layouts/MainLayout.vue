@@ -3,10 +3,6 @@ import { ref, onMounted } from "vue";
 import { useAuthStore } from "src/stores/auth";
 
 const authStore = useAuthStore();
-
-onMounted(() => {
-  console.log(authStore.isLoggedIn);
-});
 </script>
 
 <template>
