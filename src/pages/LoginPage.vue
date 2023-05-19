@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import { useAuthStore } from "src/stores/auth";
 import { useQuasar } from "quasar";
 
 // Alternaive to this.$router...
@@ -14,8 +13,6 @@ const $q = useQuasar();
 const username = ref("");
 const password = ref("");
 const errors = ref([]);
-
-const authStore = useAuthStore();
 
 async function login() {
   try {
@@ -34,8 +31,6 @@ async function login() {
       errors.value = [response.data.error];
       return;
     }
-
-    authStore.login();
 
     // $q.notify({
     //   message: "Login successful",

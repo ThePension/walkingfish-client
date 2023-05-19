@@ -1,17 +1,58 @@
+<script setup>
+import { ref, onMounted, defineProps } from "vue";
+import { useQuasar } from "quasar";
+import axios from "axios";
+
+const props = defineProps({
+  article: {
+    type: Object,
+    required: true,
+  },
+});
+
+const image = ref("");
+const isLoggedIn = ref(false);
+
+const generate = () => {
+  axios
+    .get(process.env.PEXELS_API_URL, {
+      headers: {
+        Authorization: process.env.PEXELS_API_TOKEN,
+      },
+      params: {
+        query: props.article.name,
+      },
+    })
+    .then((response) => {
+      // Set the image data
+      image.value = response.data.photos[0].src.original;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+onMounted(() => {
+  isLoggedIn.value = localStorage.getItem("jwt") != null;
+
+  generate();
+});
+</script>
+
 <template>
   <q-card class="my-card" style="width: 300px">
     <q-img :src="image" style="width: 300px; height: 300px" />
 
     <q-card-section>
-      <div class="text-h5">{{ article.name }}</div>
-      <div class="text-subtitle2">{{ article.description }}</div>
+      <div class="text-h5">{{ props.article.name }}</div>
+      <div class="text-subtitle2">{{ props.article.description }}</div>
     </q-card-section>
 
     <q-card-section class="q-pt-none row">
       <div class="text-h6 col">Tailles disponibles</div>
       <div class="col">
         <q-chip
-          v-for="size in article.sizes"
+          v-for="size in props.article.sizes"
           :key="size"
           color="primary"
           text-color="white"
@@ -25,7 +66,7 @@
       <div class="text-h6 col">Couleurs</div>
       <div class="col">
         <q-chip
-          v-for="colori in article.coloris"
+          v-for="colori in props.article.coloris"
           :key="colori.id"
           :style="{ 'background-color': colori.hexa }"
           text-color="white"
@@ -37,76 +78,28 @@
 
     <q-card-section class="q-pt-none row">
       <div class="text-h6 col">Type</div>
-      <div class="col text-h6 text-right q-mx-lg">{{ article.type }}</div>
+      <div class="col text-h6 text-right q-mx-lg">{{ props.article.type }}</div>
     </q-card-section>
 
     <q-card-section class="q-pt-none row">
       <div class="text-h6 col">Prix</div>
-      <div class="col text-h6 text-right q-mx-lg">{{ article.price }} CHF</div>
+      <div class="col text-h6 text-right q-mx-lg">
+        {{ props.article.price }} CHF
+      </div>
     </q-card-section>
 
     <!-- Change variable and check if user is logged in -->
     <q-card-section v-if="true">
-      <h1> {{ article.id }} </h1>   <!-- DEBUG TO DELETE-->
+      <h1>{{ article.id }}</h1>
+      <!-- DEBUG TO DELETE-->
       <router-link
         :to="{
-          path: 'admin/edit-article/' + article.id,
-          params: { id: article.id }
-        }">
-        <q-btn 
-        color="primary"
-        label="Editer" />
+          path: 'admin/edit-article/' + props.article.id,
+          params: { id: props.article.id },
+        }"
+      >
+        <q-btn color="primary" label="Editer" />
       </router-link>
     </q-card-section>
   </q-card>
 </template>
-
-<script>
-import { defineComponent } from "vue";
-import axios from "axios";
-import { useAuthStore } from "src/stores/auth";
-
-// Props
-export default defineComponent({
-  name: "ArticleCard",
-  props: {
-    article: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      input: this.article.name,
-      image: [],
-    };
-  },
-  methods: {
-
-    generate() {
-      axios
-        .get(process.env.PEXELS_API_URL, {
-          headers: {
-            Authorization: process.env.PEXELS_API_TOKEN,
-          },
-          params: {
-            query: this.input,
-          },
-        })
-        .then((response) => {
-          // Set the image data
-          console.log(response.data.photos);
-          this.image = response.data.photos[0].src.original;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      // this.image = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${this.input}`;
-    },
-  },
-  mounted() {
-    this.generate();
-  },
-});
-</script>

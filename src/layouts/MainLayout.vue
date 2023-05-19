@@ -1,8 +1,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useAuthStore } from "src/stores/auth";
 
-const authStore = useAuthStore();
+const isLoggedIn = ref(false);
+
+onMounted(() => {
+  isLoggedIn.value = localStorage.getItem("jwt") != null;
+
+  // Listen for changes to the localStorage
+  window.addEventListener("storage", () => {
+    isLoggedIn.value = localStorage.getItem("jwt") != null;
+  });
+});
 </script>
 
 <template>
@@ -36,7 +44,7 @@ const authStore = useAuthStore();
 
         <!-- Admin button is the user is logged in -->
         <q-btn
-          v-if="authStore.isLoggedIn"
+          v-if="isLoggedIn"
           label="Dashboard"
           color="purple"
           to="/admin"
