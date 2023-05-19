@@ -33,5 +33,18 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
+  // Check if user is logged in before each route, and redirect to login if not and route requires auth
+  Router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.auth)) {
+      if (!localStorage.getItem("jwt")) {
+        next("/login");
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
+  });
+
   return Router;
 });

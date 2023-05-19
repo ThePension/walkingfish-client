@@ -3,10 +3,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "src/stores/auth";
+import { useQuasar } from "quasar";
 
 // Alternaive to this.$router...
 // https://router.vuejs.org/guide/advanced/composition-api.html
-const router = useRouter()
+const router = useRouter();
+
+const $q = useQuasar();
 
 const username = ref("");
 const password = ref("");
@@ -25,7 +28,7 @@ async function login() {
       User
     );
 
-    console.log(response);  // Debug
+    console.log(response); // Debug
 
     if (response.data.error) {
       errors.value = [response.data.error];
@@ -34,21 +37,18 @@ async function login() {
 
     authStore.login();
 
-    // TODO Find alternative to display Quasar notification.
-    //      Cannot use `this`in script `setup` !
+    localStorage.setItem("jwt", response.data);
 
-    // app.appContext.config.globalProperties.$q.notify({
-    //   message: "Login successful",
-    //   color: "positive",
-    // });
-
-    localStorage.setItem('jwt', response.data);
+    $q.notify({
+      message: "Login successful",
+      color: "positive",
+    });
 
     router.push({ name: "home" });
   } catch (error) {
     console.log(error);
   }
-};
+}
 </script>
 
 <template>

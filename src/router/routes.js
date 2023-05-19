@@ -20,22 +20,27 @@ const routes = [
       {
         path: "admin",
         component: () => import("pages/AdminPage.vue"),
+        meta: { auth: true },
       },
       {
         path: "admin/color-management",
         component: () => import("pages/ColorManagement.vue"),
+        meta: { auth: true },
       },
       {
         path: "admin/add-article",
         component: () => import("pages/AddArticle.vue"),
+        meta: { auth: true },
       },
       {
         path: "admin/article-management",
         component: () => import("pages/ArticleManagement.vue"),
+        meta: { auth: true },
       },
       {
         path: "admin/edit-article/:id",
         component: () => import("pages/EditArticle.vue"),
+        meta: { auth: true },
       },
       {
         path: "login",
