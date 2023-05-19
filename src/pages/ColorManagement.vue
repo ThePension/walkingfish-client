@@ -43,6 +43,27 @@ const addColori = () => {
     });
 };
 
+const deleteColori = (id) => {
+  // Ask confirmation
+  if (!confirm("Voulez-vous vraiment supprimer cette couleur ?")) {
+    return;
+  }
+
+  // Include the JWT in the Authorization header for future requests
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${localStorage.getItem("jwt")}`;
+
+  axios
+    .delete(process.env.WK_API_URL + "/colori/" + id)
+    .then((response) => {
+      fetchColoris();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 onMounted(() => {
   fetchColoris();
 });
@@ -94,6 +115,12 @@ onMounted(() => {
           text-color="black"
         >
           {{ colori.name }}
+          <!-- Cross button to delete the colori -->
+          <q-icon
+            name="close"
+            class="cursor-pointer q-ml-sm"
+            @click="deleteColori(colori.id)"
+          />
         </q-chip>
       </div>
     </div>
