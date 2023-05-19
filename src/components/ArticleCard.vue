@@ -89,9 +89,7 @@ onMounted(() => {
     </q-card-section>
 
     <!-- Change variable and check if user is logged in -->
-    <q-card-section v-if="true">
-      <h1>{{ article.id }}</h1>
-      <!-- DEBUG TO DELETE-->
+    <q-card-section v-if="isLoggedIn">
       <router-link
         :to="{
           path: 'admin/edit-article/' + props.article.id,
