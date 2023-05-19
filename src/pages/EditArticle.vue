@@ -1,57 +1,63 @@
 <template>
-    <q-page class="flex flex-center">
-      <div class="q-pa-md q-gutter-sm">
-        <div class="text-h6 col">Editer un article</div>
-        <div class="col">
+  <q-page class="flex flex-center">
+    <div class="q-pa-md q-gutter-sm">
+      <div class="text-h6 col">Editer un article</div>
+      <div class="col">
+        <!-- ARTICLE FORM -->
+        <q-form
+          @submit="editArticle()"
+          class="q-gutter-md"
+          style="min-width: 500px"
+        >
+          <q-input
+            filled
+            v-model="article.name"
+            label="Nom"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val && val.length > 0) || 'La couleur doit avoir un nom !',
+            ]"
+          />
 
-          <!-- ARTICLE FORM -->
-          <q-form
-            @submit="editArticle()"
-            class="q-gutter-md"
-            style="min-width: 500px">
+          <q-input
+            filled
+            autogrow
+            v-model="article.description"
+            label="Description"
+            lazy-rules
+            :rules="[(val) => val.length > 0 || 'Doit avoir une description !']"
+          />
 
-            <q-input
-              filled
-              v-model="article.name"
-              label="Nom"
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'La couleur doit avoir un nom !']"
-            />
+          <q-input
+            filled
+            type="number"
+            prefix="CHF"
+            v-model="article.price"
+            mask="##.##"
+            label="Prix"
+            lazy-rules
+            :rules="[
+              (val) =>
+                (val !== null && val !== '' && parseInt(val) != NaN) ||
+                'Ce champ doit contenir un nombre',
+              (val) => val > 0 || 'Le prix ne doit pas être à 0',
+            ]"
+          />
 
-            <q-input
-              filled
-              autogrow
-              v-model="article.description"
-              label="Description"
-              lazy-rules
-              :rules="[ val => val.length > 0 || 'Doit avoir une description !']"
-            />
+          <q-input
+            filled
+            v-model="article.type"
+            label="Type"
+            lazy-rules
+            :rules="[
+              (val) => (val && val.length > 0) || 'Doit avoir un type !',
+            ]"
+          />
 
-            <q-input
-              filled
-              type="number"
-              prefix="CHF"
-              v-model="article.price"
-              mask='##.##'
-              label="Prix"
-              lazy-rules
-              :rules="[
-                val => (val !== null && val !== '' && parseInt(val)!=NaN)|| 'Ce champ doit contenir un nombre',
-                val => val > 0  || 'Le prix ne doit pas être à 0'
-                ]"
-            />
+          <!-- TODO delete that thing -->
 
-            <q-input
-              filled
-              v-model="article.type"
-              label="Type"
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'Doit avoir un type !']"
-            />
-
-            <!-- TODO delete that thing -->
-
-            <!-- <q-option-group
+          <!-- <q-option-group
                 name="article_sizes"
                 v-model="article.sizes"
                 :options="sizes_options"
@@ -60,26 +66,26 @@
                 inline
             /> -->
 
-            <q-select
-              filled
-              v-model="article.sizes"
-              multiple
-              :options="sizes_options"
-              label="Tailles"
-            />
+          <q-select
+            filled
+            v-model="article.sizes"
+            multiple
+            :options="sizes_options"
+            label="Tailles"
+          />
 
-            <q-select
-              filled
-              v-model="article.coloris"
-              multiple
-              :options="coloris_options"
-              :option-label="'hexa'"
-              label="Coloris"
-            />
+          <q-select
+            filled
+            v-model="article.coloris"
+            multiple
+            :options="coloris_options"
+            :option-label="'hexa'"
+            label="Coloris"
+          />
 
-            <!-- Visually better but creates more problems -->
+          <!-- Visually better but creates more problems -->
 
-            <!-- <q-select
+          <!-- <q-select
               filled
               v-model="article.coloris"
               multiple
@@ -96,16 +102,14 @@
               </template>
             </q-select> -->
 
-            <div>
-              <q-btn label="Submit" type="submit" color="primary"/>
-            </div>
-
-          </q-form>
-          <!-- END ARTICLE FORM -->
-        </div>
+          <div>
+            <q-btn label="Submit" type="submit" color="primary" />
+          </div>
+        </q-form>
+        <!-- END ARTICLE FORM -->
       </div>
-
-    </q-page>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -145,7 +149,7 @@ export default defineComponent({
       axios
         .get(process.env.WK_API_URL + "/colori")
         .then((response) => {
-          console.log(response.data);     // Debug
+          console.log(response.data); // Debug
           this.coloris_options = response.data;
         })
         .catch((error) => {
@@ -154,35 +158,40 @@ export default defineComponent({
     },
 
     getArticle() {
-        // Get the article to edit
+      // Get the article to edit
 
-        // Include the JWT in the Authorization header for future requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
+      // Include the JWT in the Authorization header for future requests
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${localStorage.getItem("jwt")}`;
 
-        axios
-            .get(process.env.WK_API_URL + "/article/" + this.$route.params.id)
-            .then((response) => {
-                console.log(response.data);     // Debug
-                this.article = response.data;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+      axios
+        .get(process.env.WK_API_URL + "/article/" + this.$route.params.id)
+        .then((response) => {
+          console.log(response.data); // Debug
+          this.article = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     editArticle() {
       // Add new article to WK_API_URL
 
       // Include the JWT in the Authorization header for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${localStorage.getItem("jwt")}`;
 
       const Article = {
+        id: this.article.id,
         name: this.article.name,
         description: this.article.description,
         price: this.article.price,
         type: this.article.type,
         sizes: this.article.sizes.map((size) => size.value),
-        coloris: this.article.coloris
+        coloris: this.article.coloris,
       };
 
       // Article.append("sizes", JSON.stringify(this.article.sizes.values));
@@ -190,20 +199,23 @@ export default defineComponent({
       console.log(Article);
 
       axios
-        .put(process.env.WK_API_URL + "/article", Article,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        .put(
+          process.env.WK_API_URL + "/article/" + this.$route.params.id,
+          Article,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
         .then((response) => {
-          console.log(response.data);     // Debug
+          console.log(response.data); // Debug
         })
         .catch((error) => {
           console.log(error);
         });
 
-        this.$router.push({ path: "/admin" });
+      this.$router.push({ path: "/admin" });
     },
   },
   created() {

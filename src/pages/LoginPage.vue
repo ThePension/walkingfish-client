@@ -47,9 +47,9 @@ async function login() {
 </script>
 
 <template>
-  <q-page class="row q-mx-xl">
-    <div class="col-12 col-md-6 col-lg-4">
-      <h1>Login</h1>
+  <q-page class="row q-mx-xl justify-center">
+    <div class="col-4">
+      <h3>Login</h3>
       <ErrorBanner :errors="errors" />
       <form @submit.prevent="login">
         <q-input
